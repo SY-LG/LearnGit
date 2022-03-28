@@ -1,5 +1,7 @@
 ---
+CJKmainfont: SimSun
 toc: true
+toc-title: "目录"
 toc-own-page: true
 author: "SYLG"
 title: "SYLG Learning Git"
