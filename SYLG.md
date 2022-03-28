@@ -46,3 +46,37 @@ user MINGW64 ~/LearnGit (master)
 $ git init
 Initialized empty Git repository in ~/LearnGit/.git/
 ```
+
+## add and commit
+
+```
+user MINGW64 ~/LearnGit (master)
+$ git add SYLG.md
+$ git add .gitignore
+$ git commit -m "[doc] as a start"
+[master (root-commit) a6590cd] [doc] as a start
+ 2 files changed, 49 insertions(+)
+ create mode 100644 .gitignore
+ create mode 100644 SYLG.md
+```
+
+git add可以通过"git add ."命令（本质上是正则匹配）将所有有改动的文件添加到暂存区。现在的.gitignore文件里面只有一行：\*.pdf，用以忽略这个文档导出的pdf格式文件。
+
+## add remote repo
+
+```
+user MINGW64 ~/LearnGit (master)
+$ git remote add origin git@github.com:SY-LG/LearnGit.git
+$ git branch -M main
+user MINGW64 ~/LearnGit (main)
+$ git push -u origin main
+Enumerating objects: 4, done.
+Counting objects: 100% (4/4), done.
+Delta compression using up to 16 threads
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (4/4), 1.78 KiB | 364.00 KiB/s, done.
+Total 4 (delta 0), reused 0 (delta 0), pack-reused 0
+To github.com:SY-LG/LearnGit.git
+ * [new branch]      main -> main
+branch 'main' set up to track 'origin/main'.
+```
