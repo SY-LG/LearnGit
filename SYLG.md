@@ -106,3 +106,138 @@ HEAD is now at 42d5995 [doc] change metadata block
 ```
 
 通过查看所有命令的记录找到想要恢复的版本的commit id并恢复到版本回退之前
+
+# branch
+
+分支是git的一个重要功能。很庆幸笔者对这方面进行了一定探索而不是完全参考教程。Git 2.35和之前的版本在merge相关操作上有了一定的区别，这将在下文中提及。以下演示操作连续进行。
+
+```
+user MINGW64 ~/LearnGit (main)
+$ touch branch.py
+```
+
+创建branch.py。此时打开编辑器，将其内容改为
+
+```
+print('Hello world!')
+```
+
+随后继续在bash shell中操作
+
+```
+user MINGW64 ~/LearnGit (main)
+$ git add .
+$ git commit -m "init for branch"
+[main 3345689] [git] init for branch
+ 1 file changed, 1 insertion(+)
+ create mode 100644 branch.py
+```
+
+准备工作完成，开始实操
+
+## switch
+
+```
+user MINGW64 ~/LearnGit (main)
+$ git switch -c dev
+Switched to a new branch 'dev'
+```
+
+创建分支并切换。-c即为创建分支。
+
+将branch.py内容更改为
+
+```
+print('Hello world!')
+print('This is dev!')
+```
+
+随后同上进行commit
+
+```
+user MINGW64 ~/LearnGit (dev)
+$ git add .
+$ git commit -m "[git] dev commit"
+[dev 48edafc] [git] dev commit
+ 1 file changed, 1 insertion(+)
+```
+
+再次切换回main
+
+```
+user MINGW64 ~/LearnGit (dev)
+$ git switch main
+Switched to branch 'main'
+Your branch is ahead of 'origin/main' by 1 commit.
+  (use "git push" to publish your local commits)
+```
+
+这一次将branch.py内容更改为
+
+```
+print('Hello World!')
+print('This is main!')
+```
+
+同上，commit
+
+```
+user MINGW64 ~/LearnGit (main)
+$ git add .
+$ git cm "[git] main commit"
+[main 75e1be8] [git] main commit
+ 1 file changed, 1 insertion(+)
+```
+
+## merge
+
+至此，我们拥有main和dev两个不同内容的分支了。尝试合并
+
+```
+user MINGW64 ~/LearnGit (main)
+$ git merge dev
+Auto-merging branch.py
+CONFLICT (content): Merge conflict in branch.py
+Automatic merge failed; fix conflicts and then commit the result.
+```
+
+此处的输出与廖老师的教程出现了不一致。原因是，Git 2.33引入了名为ort的merge strategy，在Git 2.35版本中已成为默认的策略，而不再是fast-forward（这一段说法不确保完全准确）。二者最大的区别是，前者会显式生成commit history而后者不会。在上文的命令中，若没有出现merge conflict，git将会启动文本编辑器来读取commit message。与commit命令一样，可以提前添加参数-m "xxx"表明merge成功之后的commit message写什么。
+
+此时让我们看一看branch.py
+
+```
+print('Hello World!')
+<<<<<<< HEAD
+print('This is main!')
+=======
+print('This is dev!')
+>>>>>>> dev
+```
+
+标示出了两个分支出现merge conflict的地方。这里我选的例子不够好，并没有表现出区别，但Git 2.35引入了一种新的conflict表示方法，名为zdiff3，此处不再赘述。
+
+手动更改branch.py
+
+```
+print('Hello World!')
+print('This is merge!')
+```
+
+并再次commit
+
+```
+user MINGW64 ~/LearnGit (main|MERGINE)
+$ git add .
+$ git commit -m "[git] finish merge"
+[main 65831a4] [git] finish merge
+```
+
+冲突解决，merge完成
+
+## delete
+
+```
+user MINGW64 ~/LearnGit (main)
+$ git branch -d dev
+Deleted branch dev (was 48edafc).
+```
