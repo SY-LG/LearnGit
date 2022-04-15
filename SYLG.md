@@ -82,3 +82,27 @@ To github.com:SY-LG/LearnGit.git
  * [new branch]      main -> main
 branch 'main' set up to track 'origin/main'.
 ```
+
+## reset
+
+```
+user MINGW64 ~/LearnGit (main)
+$ git reset --hard HEAD^^
+HEAD is now at a6590cd [doc] as a start
+```
+
+将版本回退至两次提交之前。HEAD^^指代该次提交，表达同样意义的还有HEAD~2或该次提交的commit id
+
+```
+user MINGW64 ~/LearnGit (main)
+$ git reflog
+a6590cd (HEAD -> main) HEAD@{0}: reset: moving to HEAD^^
+42d5995 HEAD@{1}: commit: [doc] change metadata block
+14e68e5 (origin/main) HEAD@{2}: commit: [doc] add add-and-commit and add-remote-repo
+a6590cd (HEAD -> main) HEAD@{3}: Branch: renamed refs/heads/master to refs/heads/main
+a6590cd (HEAD -> main) HEAD@{5}: commit (initial): [doc] as a start
+$ git reset --hard 42d5
+HEAD is now at 42d5995 [doc] change metadata block
+```
+
+通过查看所有命令的记录找到想要恢复的版本的commit id并恢复到版本回退之前
