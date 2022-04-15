@@ -1,2 +1,2 @@
 print('Hello World!')
-print('This is main!')
+print('This is merge!')
